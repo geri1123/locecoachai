@@ -3,21 +3,36 @@ import fetch from "node-fetch";
 import { OpenAIChatResponse } from "../../types/aiTypes";
 
 const router = Router();
-
 const prompts: Record<string, (conversationHistory: string) => { system: string; user: string }> = {
   de: (conversationHistory) => ({
-    system: "Du bist ein erfahrener Beziehungstherapeut und Paarcoach. Gib einfühlsame, umsetzbare Ratschläge basierend auf dem Gesprächsverlauf.",
-    user: `Hier ist der Gesprächsverlauf des Paares:\n\n${conversationHistory}\n\nBitte gib basierend auf diesem Gespräch Hinweise. Begrenze deine Antwort auf **nicht mehr als 70 Wörter**. Sei klar, einfühlsam und umsetzbar.`
+    system: "Du bist ein erfahrener Paartherapeut mit Schwerpunkt auf Kommunikation und emotionaler Intelligenz. Sprich ruhig, einfühlsam und praxisnah.",
+    user: `Hier ist der Gesprächsverlauf des Paares:\n\n${conversationHistory}\n\nAnalysiere kurz den emotionalen Ton (z.B. Missverständnis, Rückzug, Frustration, Nähe) und gib **1–2 klare, konkrete Ratschläge**, wie das Paar die Kommunikation sofort verbessern kann. Verwende maximal 70 Wörter und bleibe empathisch, positiv und lösungsorientiert.`
   }),
+
   en: (conversationHistory) => ({
-    system: "You are an experienced relationship therapist and couples coach. Provide empathetic, actionable advice based on the conversation history.",
-    user: `Here is the conversation history between the couple:\n\n${conversationHistory}\n\nPlease provide guidance based on this conversation. Limit your response to **no more than 70 words**. Be clear, empathetic, and actionable.`
+    system: "You are a professional couples therapist specializing in emotional communication and conflict resolution. Speak warmly and constructively.",
+    user: `Here is the couple's recent conversation:\n\n${conversationHistory}\n\nBriefly identify the emotional tone (e.g., misunderstanding, distance, defensiveness, affection) and give **1–2 short, actionable suggestions** to help them communicate better right now. Use no more than 70 words and keep the tone empathetic and encouraging.`
   }),
+
   sq: (conversationHistory) => ({
-    system: "Ju jeni një terapist i përvojshëm i marrëdhënieve dhe trajner për çifte. Jepni këshilla me empati dhe të zbatueshme bazuar në historinë e bisedës.",
-    user: `Këtu është historia e bisedës midis çiftit:\n\n${conversationHistory}\n\nJu lutem jepni udhëzime bazuar në këtë bisedë. Kufizoni përgjigjen në **jo më shumë se 70 fjalë**. Bëhuni të qartë, empatike dhe të zbatueshme.`
+    system: "Je një terapist marrëdhëniesh me përvojë, i specializuar në komunikim emocional dhe mirëkuptim në çift. Fol me empati dhe qartësi.",
+    user: `Këtu është biseda e fundit e çiftit:\n\n${conversationHistory}\n\nAnalizo shkurt tonin emocional (p.sh. keqkuptim, mërzitje, afrimitet) dhe jep **1–2 këshilla të qarta dhe praktike** për të përmirësuar komunikimin menjëherë. Mos e zgjat më shumë se 70 fjalë dhe ruaj tonin e ngrohtë dhe mbështetës.`
   }),
 };
+// const prompts: Record<string, (conversationHistory: string) => { system: string; user: string }> = {
+//   de: (conversationHistory) => ({
+//     system: "Du bist ein erfahrener Beziehungstherapeut und Paarcoach. Gib einfühlsame, umsetzbare Ratschläge basierend auf dem Gesprächsverlauf.",
+//     user: `Hier ist der Gesprächsverlauf des Paares:\n\n${conversationHistory}\n\nBitte gib basierend auf diesem Gespräch Hinweise. Begrenze deine Antwort auf **nicht mehr als 70 Wörter**. Sei klar, einfühlsam und umsetzbar.`
+//   }),
+//   en: (conversationHistory) => ({
+//     system: "You are an experienced relationship therapist and couples coach. Provide empathetic, actionable advice based on the conversation history.",
+//     user: `Here is the conversation history between the couple:\n\n${conversationHistory}\n\nPlease provide guidance based on this conversation. Limit your response to **no more than 70 words**. Be clear, empathetic, and actionable.`
+//   }),
+//   sq: (conversationHistory) => ({
+//     system: "Ju jeni një terapist i përvojshëm i marrëdhënieve dhe trajner për çifte. Jepni këshilla me empati dhe të zbatueshme bazuar në historinë e bisedës.",
+//     user: `Këtu është historia e bisedës midis çiftit:\n\n${conversationHistory}\n\nJu lutem jepni udhëzime bazuar në këtë bisedë. Kufizoni përgjigjen në **jo më shumë se 70 fjalë**. Bëhuni të qartë, empatike dhe të zbatueshme.`
+//   }),
+// };
 
 router.post("/", async (req: Request, res: Response) => {
   try {
