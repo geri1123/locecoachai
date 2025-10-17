@@ -31,7 +31,8 @@ app.get("/", (req, res) => {
 });
 app.use("/ai-coach", aiCoachRouter);
 
-const PORT = process.env.PORT || 8000; ;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+const PORT = Number(process.env.PORT) || 8000;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ Server running on http://localhost:${PORT}`);
 });
